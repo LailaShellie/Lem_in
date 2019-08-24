@@ -14,14 +14,20 @@
 
 int		main()
 {
-	char *map;
+	char	*map;
+	t_map	*nest;
 
 	map = read_and_save();
-	if (!(check_map(map)))
+	if (!(validation(map)))
 	{
 		ft_putstr("Error\n");
 		return (0);
 	}
-//	ft_putstr(map);
+	if (!(nest = make_map(map)))
+	{
+		ft_putstr("Error\n");
+		return (0);
+	}
+	free_map(&nest);
 	return (0);
 }

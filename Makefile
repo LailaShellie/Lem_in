@@ -10,11 +10,12 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC = main.c read_and_save.c validation.c find.c define.c
+SRC = main.c read_and_save.c validation.c find.c define.c check_parts.c \
+	free.c make_map.c make_links.c
 
 HDR = lem_in.h
 
-OBJ = main.o read_and_save.o validation.o find.o define.o
+OBJ = $(SRC:.c=.o)
 
 LIB = libft/libft.a
 

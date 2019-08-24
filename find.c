@@ -12,6 +12,19 @@
 
 #include "lem_in.h"
 
+int 	find_index_by_name(t_room *rooms, int num, char *name)
+{
+	int 	i;
+
+	i = -1;
+	while (++i < num)
+	{
+		if (ft_strequ(rooms[i].name, name))
+			return (i);
+	}
+	return (-1);
+}
+
 int		find_links(char **split)
 {
 	int		i;
