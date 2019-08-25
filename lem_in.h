@@ -92,4 +92,10 @@ int 	check_part2(char **split, int *mas);
 int 	check_part3(char **split, int *mas);
 int 	check_part4(char **split);
 
+/*
+ * make_links.c
+ */
+
+int 		make_links(t_room *rooms, char **split, int num);
+
 #endif
