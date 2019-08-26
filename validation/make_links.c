@@ -94,8 +94,9 @@ int 		make_links(t_room *rooms, char **split, int num)
 	i = -1;
 	while (++i < num)
 	{
-		if (!(rooms[i].links = (int *)ft_memalloc(sizeof(int) * rooms[i].num_of_links)))
-			return (0);
+//		if (!(rooms[i].links = (int *)ft_memalloc(sizeof(int) * rooms[i].num_of_links)))
+//			return (0);
+		rooms[i].links = (int *)ft_memalloc(sizeof(int) * rooms[i].num_of_links);
 		j = -1;
 		while (++j < rooms[i].num_of_links)
 			rooms[i].links[j] = -1;

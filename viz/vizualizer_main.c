@@ -1,31 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   read_and_save.c                                    :+:      :+:    :+:   */
+/*   vizualizer_main.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lshellie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/08/23 16:30:42 by lshellie          #+#    #+#             */
-/*   Updated: 2019/08/23 16:30:43 by lshellie         ###   ########.fr       */
+/*   Created: 2019/08/25 12:56:33 by lshellie          #+#    #+#             */
+/*   Updated: 2019/08/25 12:56:36 by lshellie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
-
-char		*ft_free_split(char **split, int num)
-{
-	int		i;
-
-	i = 0;
-	while (i < num)
-	{
-		free(split[i]);
-		++i;
-	}
-	free(split);
-	split = 0;
-	return (0);
-}
+#include "vizualizer.h"
 
 static char	*ft_strjoin_n(char *s1, char *s2)
 {
@@ -53,12 +38,7 @@ static char	*ft_strjoin_n(char *s1, char *s2)
 	return (str);
 }
 
-/*
- * Считывает весь файл, соединяет его в одну строку и возвращает её
- * Также проверяет наличие пустых строк, строк начинающихся на 'L' и '-'
- */
-
-char		*read_and_save(void)
+static char		*read_input(void)
 {
 	char	*map;
 	char	*buf;
@@ -68,13 +48,6 @@ char		*read_and_save(void)
 	buf = 0;
 	while ((ret = get_next_line(0, &buf)) != 0)
 	{
-		if (ret < 0 || buf[0] == 0 ||
-		buf[0] == 'L' || buf[0] == '-')
-		{
-			buf ? free(buf) : buf;
-			map ? free(map) : 0;
-			return (0);
-		}
 		if (!map)
 			map = ft_strdup(buf);
 		else
@@ -83,4 +56,45 @@ char		*read_and_save(void)
 	}
 	map = ft_strjoin_n(map, "\0");
 	return (map);
+}
+
+static char 	*get_turns(char *input)
+{
+	char 	*turns;
+	int 	i;
+
+	i = -1;
+	while (input[++i])
+	{
+		if (input[i] == 'L')
+			break ;
+	}
+	turns = ft_strdup(&input[i]);
+	input[i] = 0;
+	return (turns);
+}
+
+int 			main()
+{
+	char	*input;
+	char 	*turns;
+	char 	*map;
+	t_map	*nest;
+	t_mlx	mlx;
+
+	input = read_input();
+	turns = get_turns(input);
+	map = ft_strdup(input);
+	free(input);
+	printf("%s%s", turns, map);
+	if (!(nest = make_map(map)))
+	{
+		ft_putstr("Error\n");
+		return (0);
+	}
+	mlx.map = nest;
+	init(&mlx);
+	free(map);
+	free_map(&nest);
+	return (0);
 }

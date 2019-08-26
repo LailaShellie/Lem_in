@@ -29,6 +29,7 @@ typedef struct		s_room
 	int 			end;
 	int 			num_of_links;
 	int 			*links;
+	int				visited;
 }					t_room;
 
 typedef struct		s_map
