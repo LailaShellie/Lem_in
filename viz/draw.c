@@ -54,10 +54,6 @@ static void		plot(int x, int y, t_img *win)
 		return ;
 	mas = (int *)win->data;
 	mas[x + y * win->size_line / 4] = color1;
-//	if (mas[x - 1 + (y) * win->size_line / 4] == 0)
-		mas[x - 1 + (y) * win->size_line / 4] = color2;
-//	if (mas[x + 1 + (y) * win->size_line / 4] == 0)
-		mas[x + 1 + (y) * win->size_line / 4] = color2;
 }
 
 void		draw_room(t_room *room, t_mlx *mlx)
@@ -83,10 +79,7 @@ void		draw_room(t_room *room, t_mlx *mlx)
 	}
 	j = -1;
 	while (++j < room->num_of_links)
-	{
-		if (!mlx->map->rooms[room->links[j]].visited)
-			draw_line(mlx, room, &mlx->map->rooms[room->links[j]]);
-	}
+		draw_line(mlx, room, &mlx->map->rooms[room->links[j]]);
 }
 
 void		draw(t_mlx *mlx)
@@ -97,7 +90,7 @@ void		draw(t_mlx *mlx)
 	int 	j;
 
 	i = -1;
-	bzero(mlx->img->data, WIDTH * HEIGHT);
+	bzero(mlx->img->data, WIDTH * HEIGHT * 4);
 	num = mlx->map->num_of_rooms;
 	cur = mlx->map->rooms;
 	while (++i < num)

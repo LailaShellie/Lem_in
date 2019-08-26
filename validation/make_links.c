@@ -81,8 +81,8 @@ int 		make_links(t_room *rooms, char **split, int num)
 	int 	j;
 
 	i = -1;
-	if (!(check_links(split)))
-		return (0);
+//	if (!(check_links(split)))
+//		return (0);
 	while (split[++i])
 	{
 		if (is_link(split[i]))

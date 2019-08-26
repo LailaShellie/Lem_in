@@ -14,18 +14,20 @@
 
 void		set_pos(t_pos *pos, t_mlx *mlx, t_room *room)
 {
-	pos->x0 = (room->x + mlx->img->dx) * mlx->img->zoom + WIDTH / 2 - mlx->img->width / 2;
-	pos->y0 = (room->y + mlx->img->dy) * mlx->img->zoom + HEIGHT / 2 - mlx->img->height / 2;
-	pos->x = mlx->img->zoom / 2;
+	pos->x0 = (room->x - mlx->img->width / 2) * mlx->img->zoom + WIDTH / 2 + mlx->img->dx;
+	pos->y0 = (room->y - mlx->img->height / 2) * mlx->img->zoom + HEIGHT / 2 + mlx->img->dy;
+	pos->x = mlx->img->zoom / 4;
 	pos->y = 0;
 	pos->err = 0;
 }
 
 static void	set_center(t_mlx *mlx, t_max_min *i)
 {
-	mlx->img->zoom = 20;
-	mlx->img->width = ft_abs(i->max_x - i->min_x) * mlx->img->zoom;
-	mlx->img->height = ft_abs(i->max_y - i->min_y) * mlx->img->zoom;
+	mlx->img->width = ft_abs(i->max_x - i->min_x);
+	mlx->img->height = ft_abs(i->max_y - i->min_y);
+	mlx->img->zoom = WIDTH;
+	mlx->img->zoom /= mlx->img->width > mlx->img->height ? mlx->img->width : mlx->img->height;
+	mlx->img->zoom -= mlx->img->zoom / 4;
 }
 
 void		calculate_positions(t_mlx *mlx)
