@@ -43,18 +43,14 @@ void	draw_line(t_mlx *mlx, t_room *room0, t_room *room1)
 	{
 		if (l0.x > l1.x)
 			wu_low(mlx, &l1, &l0);
-			//bresenham_low(mlx, &l1, &l0);
 		else
 			wu_low(mlx, &l0, &l1);
-			//bresenham_low(mlx, &l0, &l1);
 	}
 	else
 	{
 		if (l0.y > l1.y)
 			wu_hight(mlx, &l1, &l0);
-			//bresenham_hight(mlx, &l1, &l0);
 		else
 			wu_hight(mlx, &l0, &l1);
-			//bresenham_hight(mlx, &l0, &l1);
 	}
 }

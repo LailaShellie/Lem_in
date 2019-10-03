@@ -10,45 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "../lem_in.h"
 
-int		check_duplicates_links(char **split, int i)
+int     check_start_end(t_map *nest)
 {
-	char	*link;
-	char	**split_link1;
-	char	**split_link2;
-
-	link = split[i];
-	while (split[++i])
-	{
-		split_link1 = ft_strsplit(link, '-');
-		split_link2 = ft_strsplit(split[i], '-');
-		if ((ft_strequ(split_link1[0], split_link2[0]) && ft_strequ(split_link1[1], split_link2[1]))
-		|| (ft_strequ(split_link1[1], split_link2[0]) && ft_strequ(split_link1[0], split_link2[1]))
-		|| (ft_strequ(split_link1[0], split_link2[1]) && ft_strequ(split_link1[1], split_link2[0])))
-		{
-			ft_free_split(split_link1, 2);
-			ft_free_split(split_link2, 2);
-			return (0);
-		}
-		ft_free_split(split_link1, 2);
-		ft_free_split(split_link2, 2);
-	}
-	return (1);
-}
-
-int 	check_links(char **split)
-{
-	int 	i;
+	int     i;
 
 	i = -1;
-	while (split[++i])
+	while (++i < nest->num_of_rooms)
 	{
-		if (is_link(split[i]))
-		{
-			if (!(check_duplicates_links(split, i)))
-				return (0);
-		}
+		if ((nest->rooms[i].end || nest->rooms[i].start) && !nest->rooms[i].num_of_links)
+			return (0);
 	}
 	return (1);
 }
@@ -104,6 +76,6 @@ int		validation(char *map)
 	if (!check_part1(split, mas) || !check_part2(split, mas) \
 	|| !check_part3(split, mas) || !check_part4(split))
 		return (0);
-//	printf("%d\n%d\n%d\n", ++mas[ANTS], ++mas[ROOMS], ++mas[LINKS]);
+	free_split(split);
 	return (1);
 }

@@ -10,7 +10,69 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "../lem_in.h"
+
+void		init_link_mas(t_map *map, int n1, int n2)
+{
+	int 	i;
+
+	i = -1;
+	if (!map->rooms[n1].links)
+	{
+		map->rooms[n1].links = ft_memalloc(map->rooms[n1].num_of_links * sizeof(int));
+		while (++i < map->rooms[n1].num_of_links)
+			map->rooms[n1].links[i] = -1;
+	}
+	i = -1;
+	if (!map->rooms[n2].links)
+	{
+		map->rooms[n2].links = ft_memalloc(map->rooms[n2].num_of_links * sizeof(int));
+		while (++i < map->rooms[n2].num_of_links)
+			map->rooms[n2].links[i] = -1;
+	}
+}
+
+void		init_link(t_map *map, int n1, int n2)
+{
+	int j;
+
+	j = -1;
+	init_link_mas(map, n1, n2);
+	while (++j < map->rooms[n2].num_of_links)
+	{
+		if (map->rooms[n2].links[j] == -1)
+		{
+			map->rooms[n2].links[j] = n1;
+			break ;
+		}
+	}
+	j = -1;
+	while (++j < map->rooms[n1].num_of_links)
+	{
+		if (map->rooms[n1].links[j] == -1)
+		{
+			map->rooms[n1].links[j] = n2;
+			break ;
+		}
+	}
+}
+
+void		link_rooms(t_map *map, t_links *links)
+{
+	int 	i;
+	int 	n1;
+	int 	n2;
+
+	i = -1;
+	while (links->first[++i])
+	{
+		if (links->first[i][0] == '#' || links->second[i][0] == '#')
+			continue ;
+		n1 = find_index_by_name(map->rooms, map->num_of_rooms, links->first[i]);
+		n2 = find_index_by_name(map->rooms, map->num_of_rooms, links->second[i]);
+		init_link(map, n1, n2);
+	}
+}
 
 int 		count_rooms(char **split)
 {
@@ -20,20 +82,25 @@ int 		count_rooms(char **split)
 	i = -1;
 	num = 0;
 	while (split[++i])
+	{
 		if (is_room(split[i]))
 			++num;
+	}
 	return (num);
 }
 
-void		get_name_x_y(t_room *room, char *line)
+int			get_name_x_y(t_room *room, char *line)
 {
 	char 	**split;
 
 	if (!(split = ft_strsplit(line, ' ')))
-		return ;
-	room->name = ft_strdup(split[0]);
+		return (0);
+	if (!(room->name = ft_strdup(split[0])))
+		return (0);
 	room->x = ft_atoi(split[1]);
 	room->y = ft_atoi(split[2]);
+	free_split(split);
+	return (1);
 }
 
 t_room		*make_rooms(char **split, int num)
@@ -53,7 +120,8 @@ t_room		*make_rooms(char **split, int num)
 		if (ft_strequ(split[i], "##end"))
 			rooms[j].end = 1;
 		if (is_room(split[i]))
-			get_name_x_y(&rooms[j++], split[i]);
+			if (!get_name_x_y(&rooms[j++], split[i]))
+				return (0);
 	}
 	if (!(check_duplicates(rooms, num)))
 		free_rooms(&rooms, num);
@@ -75,11 +143,11 @@ t_map		*make_map(char *map)
 		free_map(&new_map);
 		return (0);
 	}
-	if (!make_links(new_map->rooms, split, new_map->num_of_rooms))
+	if (!make_links(new_map, split))
 	{
 		free_map(&new_map);
 		return (0);
 	}
-	show_map(new_map);
+	free_split(split);
 	return (new_map);
 }

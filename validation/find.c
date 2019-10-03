@@ -10,7 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "../lem_in.h"
+
+int		find_start(t_map *nest)
+{
+	int i;
+
+	i = -1;
+	while (++i < nest->num_of_rooms)
+		if (nest->rooms[i].start)
+			return (i);
+	return (-1);
+}
 
 int 	find_index_by_name(t_room *rooms, int num, char *name)
 {

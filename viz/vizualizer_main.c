@@ -84,9 +84,9 @@ int 			main()
 
 	input = read_input();
 	turns = get_turns(input);
+	mlx.turns = ft_strsplit(turns, '\n');
 	map = ft_strdup(input);
 	free(input);
-	printf("%s%s", turns, map);
 	if (!(nest = make_map(map)))
 	{
 		ft_putstr("Error\n");
@@ -94,6 +94,7 @@ int 			main()
 	}
 	mlx.map = nest;
 	init(&mlx);
+	free(turns);
 	free(map);
 	free_map(&nest);
 	return (0);

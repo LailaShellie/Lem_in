@@ -20,7 +20,7 @@ static int		close_window(void *param)
 
 void			hooks(t_mlx *mlx)
 {
-
+	mlx_loop_hook(mlx->mlx, make_step, mlx);
 	mlx_hook(mlx->win, 17, 0, close_window, mlx->win);
 	mlx_hook(mlx->win, 2, 0, key_event, mlx);
 	mlx_loop(mlx->mlx);
@@ -40,6 +40,10 @@ void		init(t_mlx *mlx)
 			&mlx->img->bpp, &mlx->img->size_line, &mlx->img->endian)))
 		return ;
 	calculate_positions(mlx);
-	draw(mlx);
+	mlx->ant_img = make_ant(mlx);
+	if (!(mlx->ants = (t_ant *) ft_memalloc(sizeof(t_ant) * mlx->map->ants)))
+		return ;
+	set_to_start(mlx);
+	put_ants(mlx);
 	hooks(mlx);
 }

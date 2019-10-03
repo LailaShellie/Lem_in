@@ -10,97 +10,107 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem_in.h"
+#include "../lem_in.h"
 
-void		link_rooms(t_room *rooms, char **split, int num)
+int 		count_num_of_links(t_map *map, t_links *links)
 {
 	int 	i;
-	int 	j;
-	int 	k;
-
-	k = -1;
-	i = find_index_by_name(rooms, num, split[0]);
-	j = find_index_by_name(rooms, num, split[1]);
-	while (++k < rooms[i].num_of_links)
-	{
-		if (rooms[i].links[k] == -1)
-		{
-			rooms[i].links[k] = j;
-			break ;
-		}
-	}
-	k = -1;
-	while (++k < rooms[j].num_of_links)
-	{
-		if (rooms[j].links[k] == -1)
-		{
-			rooms[j].links[k] = i;
-			break ;
-		}
-	}
-}
-
-void		set_links(t_room *rooms, char **split, int num)
-{
-	int 	i;
-	char 	**split_link;
+	int 	n1;
+	int 	n2;
 
 	i = -1;
-	while (split[++i])
+	while (links->first[++i])
 	{
-		if (is_link(split[i]))
-		{
-			split_link = ft_strsplit(split[i], '-');
-			link_rooms(rooms, split_link, num);
-			ft_free_split(split_link, 2);
-		}
+		if (links->first[i][0] == '#' || links->second[i][0] == '#')
+			continue ;
+		n1 = find_index_by_name(map->rooms, map->num_of_rooms, links->first[i]);
+		n2 = find_index_by_name(map->rooms, map->num_of_rooms, links->second[i]);
+		if (n1 < 0 || n2 < 0)
+			return (0);
+		map->rooms[n1].num_of_links += 1;
+		map->rooms[n2].num_of_links += 1;
 	}
-}
-
-int 		split_link(char *line, t_room *rooms, int num)
-{
-	char 	**split;
-	int 	i;
-	int 	j;
-
-	if (!(split = ft_strsplit(line, '-')))
-		return (0);
-	i = find_index_by_name(rooms, num, split[0]);
-	j = find_index_by_name(rooms, num, split[1]);
-	if (i == j || i < 0 || j < 0)
-		return (0);
-	rooms[i].num_of_links += 1;
-	rooms[j].num_of_links += 1;
-	ft_free_split(split, 2);
 	return (1);
 }
 
-int 		make_links(t_room *rooms, char **split, int num)
+int 		count_links(char **split)
+{
+	int		i;
+	int 	num;
+
+	i = -1;
+	num = 0;
+	while (split[++i])
+		if (is_link(split[i]))
+			++num;
+	return (num);
+}
+
+void		set_links(t_links *links, char **split)
+{
+	int		i;
+	int 	j;
+	int 	num;
+	char 	*minus;
+
+	j = 0;
+	i = -1;
+	num = 1 + count_links(split);
+	links->first = ft_memalloc(num * sizeof(char *));
+	links->second = ft_memalloc(num * sizeof(char *));
+	links->first[num - 1] = 0;
+	links->second[num - 1] = 0;
+	while (split[++i])
+	{
+		if (is_link(split[i]))
+		{
+			minus = ft_strchr(split[i], '-');
+			*minus = 0;
+			links->first[j] = ft_strdup(split[i]);
+			links->second[j] = ft_strdup(minus + 1);
+			++j;
+		}
+
+	}
+}
+
+int			check_links_duplicates(t_links *links)
 {
 	int 	i;
 	int 	j;
 
 	i = -1;
-//	if (!(check_links(split)))
-//		return (0);
-	while (split[++i])
+	while (links->first[++i])
 	{
-		if (is_link(split[i]))
+		if (!ft_strcmp(links->first[i], links->second[i]))
+			return (0);
+		j = i;
+		while (links->first[++j])
 		{
-			if (!split_link(split[i], rooms, num))
-				return (0);
+			if ((!ft_strcmp(links->first[i], links->first[j]) && !ft_strcmp(links->second[i], links->second[j])) ||
+			(!ft_strcmp(links->second[i], links->first[j]) && !ft_strcmp(links->first[i], links->second[j])))
+			{
+				links->first[i][0] = '#';
+				links->second[i][0] = '#';
+			}
 		}
 	}
-	i = -1;
-	while (++i < num)
+	return (1);
+}
+
+int 		make_links(t_map *map, char **split)
+{
+	t_links	links;
+
+	set_links(&links, split);
+	if (!(check_links_duplicates(&links)))
+		return (0);
+	if (!(count_num_of_links(map, &links)))
 	{
-//		if (!(rooms[i].links = (int *)ft_memalloc(sizeof(int) * rooms[i].num_of_links)))
-//			return (0);
-		rooms[i].links = (int *)ft_memalloc(sizeof(int) * rooms[i].num_of_links);
-		j = -1;
-		while (++j < rooms[i].num_of_links)
-			rooms[i].links[j] = -1;
+		return (0);
 	}
-	set_links(rooms, split, num);
+	link_rooms(map, &links);
+	free_split(links.second);
+	free_split(links.first);
 	return (1);
 }

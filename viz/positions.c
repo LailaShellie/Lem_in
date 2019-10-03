@@ -16,7 +16,7 @@ void		set_pos(t_pos *pos, t_mlx *mlx, t_room *room)
 {
 	pos->x0 = (room->x - mlx->img->width / 2) * mlx->img->zoom + WIDTH / 2 + mlx->img->dx;
 	pos->y0 = (room->y - mlx->img->height / 2) * mlx->img->zoom + HEIGHT / 2 + mlx->img->dy;
-	pos->x = mlx->img->zoom / 4;
+	pos->x = 20;
 	pos->y = 0;
 	pos->err = 0;
 }
