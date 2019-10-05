@@ -12,27 +12,27 @@
 
 #include "../lem_in.h"
 
-t_sets		*new_set(t_map *nest, int cur)
+t_ways		*new_set(t_map *nest, int cur)
 {
-	t_sets		*new;
+	t_ways		*new;
 
-	if (!(new = ft_memalloc(sizeof(t_sets))))
+	if (!(new = ft_memalloc(sizeof(t_ways))))
 		return (0);
 	return (new);
 }
 
-void		put_set(t_lst *lst, t_sets *new)
+void		put_set(t_lst *lst, t_ways *new)
 {
-	t_sets		*cur;
-	t_sets		*prev;
+	t_ways		*cur;
+	t_ways		*prev;
 
 	prev = 0;
-	if (!lst->sets)
+	if (!lst->ways)
 	{
-		lst->sets = new;
+		lst->ways = new;
 		return ;
 	}
-	cur = lst->sets;
+	cur = lst->ways;
 	while (cur)
 	{
 		if (new->len < cur->len)
@@ -41,7 +41,7 @@ void		put_set(t_lst *lst, t_sets *new)
 			if (prev)
 				prev->next = new;
 			else
-				lst->sets = new;
+				lst->ways = new;
 			return ;
 		}
 		prev = cur;

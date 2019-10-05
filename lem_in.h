@@ -29,15 +29,15 @@ typedef struct		s_nodes
 	struct s_nodes	*prev;
 }					t_nodes;
 
-typedef struct		s_sets
+typedef struct		s_ways
 {
 	t_nodes			*nodes_start;
 	t_nodes			*nodes_end;
 	int 			num_of_ants;
 	int 			len;
 	int 			turns;
-	struct s_sets	*next;
-}					t_sets;
+	struct s_ways	*next;
+}					t_ways;
 
 typedef struct		s_lst
 {
@@ -46,7 +46,7 @@ typedef struct		s_lst
 	int 			all_ants;
 	int 			bad;
 	int 			num_of_sets;
-	t_sets			*sets;
+	t_ways			*ways;
 	struct s_lst	*next;
 }					t_lst;
 
@@ -66,14 +66,16 @@ typedef struct		s_room
 	int 			num_of_links;
 	int 			*links;
 	int				weight;
+	int				sh;
+	int				visited;
 	int 			color;
 }					t_room;
 
-typedef struct		s_way
+typedef struct		s_pipe
 {
-	int 			r1;
-	int 			r2;
-}					t_way;
+	int				status;
+	int				good;
+}					t_pipe;
 
 typedef struct		s_map
 {
@@ -82,9 +84,9 @@ typedef struct		s_map
 	int 			num_of_ways;
 	int 			index_end;
 	int 			index_start;
+	int				step;
 	t_room			*rooms;
-	t_way			*ways;
-	t_path			*paths;
+	t_pipe			*pipes;
 	t_lst			*sets;
 	char 			*str;
 }					t_map;
@@ -97,8 +99,8 @@ void		ft_show_sets(t_map *nest);
 void		set_new_set(t_lst **lst, t_lst *new);
 t_lst		*new_lst(void);
 void		free_lst(t_lst *lst);
-t_sets		*new_set(t_map *nest, int cur);
-void		put_set(t_lst *lst, t_sets *new);
+t_ways		*new_set(t_map *nest, int cur);
+void		put_set(t_lst *lst, t_ways *new);
 int 		print_solution(t_lst *lst, t_map *nest);
 
 /*
@@ -168,11 +170,15 @@ int 		make_links(t_map *map, char **split);
 void		link_rooms(t_map *map, t_links *links);
 
 /*
- * solution.c
+ * solution_main.c
  */
 
-void		main_solution(t_map *nest);
-void		ft_solution(t_map *nest);
+int			solution(t_map *map);
+int			dijkstra(t_map *map);
+int			make_pipes(t_map *map);
+int			show_pipes(t_map *map);
+int			remove_dead_pipes(t_map *map);
+int			find_way(t_map *map);
 
 /*
  * sets.c

@@ -34,7 +34,8 @@ int		main()
 	if (!check_start_end(nest))
 		return (error(nest, 0));
 	nest->str = map;
-	main_solution(nest);
+	if (!(solution(nest)))
+		return (error(nest, 0));
 //	show_map(nest);
 	free_map(&nest);
 	return (0);

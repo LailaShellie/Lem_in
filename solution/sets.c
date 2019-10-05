@@ -15,23 +15,23 @@
 void		ft_show_sets(t_map *nest)
 {
 	t_lst		*cur_lst;
-	t_sets		*cur_set;
+	t_ways		*cur_way;
 	t_nodes		*cur_node;
 
 	cur_lst = nest->sets;
 	while (cur_lst)
 	{
-		cur_set = cur_lst->sets;
-		while (cur_set)
+		cur_way = cur_lst->ways;
+		while (cur_way)
 		{
-			cur_node = cur_set->nodes_start;
+			cur_node = cur_way->nodes_start;
 			while (cur_node)
 			{
 				printf("%s ", nest->rooms[cur_node->num].name);
 				cur_node = cur_node->next;
 			}
-			printf("len - %d ants = %d turns - %d bad  - %d\n", cur_set->len + 1, cur_set->turns ? cur_set->turns - cur_set->len : 0, cur_set->turns, cur_lst->bad);
-			cur_set = cur_set->next;
+			printf(" | len - %d ants = %d turns - %d bad  - %d\n", cur_way->len + 1, cur_way->turns ? cur_way->turns - cur_way->len : 0, cur_way->turns, cur_lst->bad);
+			cur_way = cur_way->next;
 		}
 		printf("sum - %d\n", cur_lst->sum);
 		printf("------\n");
@@ -39,7 +39,7 @@ void		ft_show_sets(t_map *nest)
 	}
 }
 
-int 		set_node(t_sets *new, int cur)
+int 		set_node(t_ways *new, int cur)
 {
 	t_nodes		*cur_node;
 
@@ -63,7 +63,7 @@ int 		set_node(t_sets *new, int cur)
 int			make_set(t_map *nest, t_lst *lst, int cur)
 {
 	int 	i;
-	t_sets	*new;
+	t_ways	*new;
 
 	if (!(new = new_set(nest, cur)))
 		return (0);
@@ -72,12 +72,14 @@ int			make_set(t_map *nest, t_lst *lst, int cur)
 	while (++i < nest->rooms[cur].num_of_links)
 	{
 		if ((nest->rooms[nest->rooms[cur].links[i]].sh == nest->rooms[cur].sh
-			 && nest->rooms[nest->rooms[cur].links[i]].weght == nest->rooms[cur].weght + 1)
+			 && nest->rooms[nest->rooms[cur].links[i]].weight == nest->rooms[cur].weight + 1)
 			 || nest->rooms[cur].links[i] == nest->index_end)
 		{
 			set_node(new, nest->rooms[cur].links[i]);
 			cur = nest->rooms[cur].links[i];
 			++new->len;
+			if (cur == nest->index_end)
+				break ;
 			i = -1;
 		}
 	}
@@ -107,5 +109,6 @@ void 		find_sets(t_map *nest)
 			make_set(nest, new, nest->rooms[cur].links[i]);
 		}
 	}
-	calculate_turns(nest, new);
+	if (new)
+		calculate_turns(nest, new);
 }

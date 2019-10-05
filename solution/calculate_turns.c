@@ -14,58 +14,58 @@
 
 void 	find_max(t_lst *lst)
 {
-	t_sets		*cur_set;
+	t_ways		*cur_way;
 
 	lst->sum = 0;
-	cur_set = lst->sets;
-	while (cur_set)
+	cur_way = lst->ways;
+	while (cur_way)
 	{
-		if (cur_set->turns < cur_set->len)
+		if (cur_way->turns < cur_way->len)
 			lst->bad = 1;
-		if (cur_set->turns > lst->sum)
-			lst->sum = cur_set->turns;
-		cur_set = cur_set->next;
+		if (cur_way->turns > lst->sum)
+			lst->sum = cur_way->turns;
+		cur_way = cur_way->next;
 	}
 }
 
-int		is_sorted(t_sets *sets)
+int		is_sorted(t_ways *ways)
 {
-	t_sets		*cur_set;
+	t_ways		*cur_way;
 
-	cur_set = sets;
-	while (cur_set && cur_set->next)
+	cur_way = ways;
+	while (cur_way && cur_way->next)
 	{
-		if (cur_set->next->turns && cur_set->turns > cur_set->next->turns)
+		if (cur_way->next->turns && cur_way->turns > cur_way->next->turns)
 			return (0);
-		if (!cur_set->next->turns && cur_set->turns > cur_set->next->len)
+		if (!cur_way->next->turns && cur_way->turns > cur_way->next->len)
 			return (0);
-		cur_set = cur_set->next;
+		cur_way = cur_way->next;
 	}
 	return (1);
 }
 
 int 	calculate_turns(t_map *nest, t_lst *lst)
 {
-	t_sets		*cur_set;
+	t_ways		*cur_way;
 
-	cur_set = lst->sets;
-	cur_set->turns = nest->ants + cur_set->len;
-	while (!is_sorted(lst->sets))
+	cur_way = lst->ways;
+	cur_way->turns = nest->ants + cur_way->len;
+	while (!is_sorted(lst->ways))
 	{
-		cur_set = lst->sets;
-		while (cur_set && cur_set->next)
+		cur_way = lst->ways;
+		while (cur_way && cur_way->next)
 		{
-			if (!cur_set->next->turns && cur_set->turns > cur_set->next->len)
+			if (!cur_way->next->turns && cur_way->turns > cur_way->next->len)
 			{
-				--cur_set->turns;
-				cur_set->next->turns = cur_set->next->len + 1;
+				--cur_way->turns;
+				cur_way->next->turns = cur_way->next->len + 1;
 			}
-			while (cur_set->next->turns && cur_set->turns > cur_set->next->turns)
+			while (cur_way->next->turns && cur_way->turns > cur_way->next->turns)
 			{
-				--cur_set->turns;
-				++cur_set->next->turns;
+				--cur_way->turns;
+				++cur_way->next->turns;
 			}
-			cur_set = cur_set->next;
+			cur_way = cur_way->next;
 		}
 	}
 	find_max(lst);

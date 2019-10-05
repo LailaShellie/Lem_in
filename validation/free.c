@@ -14,24 +14,24 @@
 
 void		free_sets(t_lst *lst)
 {
-	t_sets		*cur_set;
+	t_ways		*cur_way;
 	t_lst		*tmp_lst;
 	t_nodes		*tmp_nodes;
-	t_sets		*tmp_set;
+	t_ways		*tmp_set;
 
 	while (lst)
 	{
-		cur_set = lst->sets;
-		while (cur_set)
+		cur_way = lst->ways;
+		while (cur_way)
 		{
-			while (cur_set->nodes_start)
+			while (cur_way->nodes_start)
 			{
-				tmp_nodes = cur_set->nodes_start;
-				cur_set->nodes_start = cur_set->nodes_start->next;
+				tmp_nodes = cur_way->nodes_start;
+				cur_way->nodes_start = cur_way->nodes_start->next;
 				free(tmp_nodes);
 			}
-			tmp_set = cur_set;
-			cur_set = cur_set->next;
+			tmp_set = cur_way;
+			cur_way = cur_way->next;
 			free(tmp_set);
 		}
 		tmp_lst = lst;
@@ -87,10 +87,9 @@ void			show_map(t_map *map)
 		else if (map->rooms[i].end)
 			printf("End\n");
 		j = -1;
-		printf("%d - weight %d - num_of_links\n", map->rooms[i].weght, map->rooms[i].num_of_links);
+		printf("%d - weight\n%d - num_of_links\n", map->rooms[i].weight, map->rooms[i].num_of_links);
 		while (++j < map->rooms[i].num_of_links && map->rooms[i].links)
 			printf("%s\n", map->rooms[map->rooms[i].links[j]].name);
-		printf("sh - %d\n", map->rooms[i].sh);
 	}
 	printf("----------------\n");
 }
@@ -100,8 +99,8 @@ void			free_map(t_map **map)
 	if (!map || !*map)
 		return ;
 	free_rooms(&(*map)->rooms, (*map)->num_of_rooms);
-	free((*map)->ways);
 	free_sets((*map)->sets);
+	free((*map)->pipes);
 	free((*map)->str);
 	free(*map);
 	*map = 0;
