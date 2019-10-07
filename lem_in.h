@@ -20,6 +20,13 @@
 # define ROOMS 1
 # define LINKS 2
 
+typedef struct		s_queue
+{
+	int 			i;
+	int 			weight;
+	struct s_queue	*next;
+}					t_queue;
+
 typedef struct		s_nodes
 {
 	int 			num;
@@ -74,6 +81,7 @@ typedef struct		s_room
 typedef struct		s_pipe
 {
 	int				status;
+	int 			forb;
 	int				good;
 }					t_pipe;
 
@@ -88,6 +96,7 @@ typedef struct		s_map
 	t_room			*rooms;
 	t_pipe			*pipes;
 	t_lst			*sets;
+	t_queue			*queue;
 	char 			*str;
 }					t_map;
 
@@ -179,6 +188,8 @@ int			make_pipes(t_map *map);
 int			show_pipes(t_map *map);
 int			remove_dead_pipes(t_map *map);
 int			find_way(t_map *map);
+int 		update_dijkstra(t_map *map);
+int			find_next(t_map *map);
 
 /*
  * sets.c
@@ -188,6 +199,7 @@ void 		find_sets(t_map *nest);
 int			make_set(t_map *nest, t_lst *lst, int cur);
 int 		count_sets_len(t_map *nest, int cur);
 int			calculate_turns(t_map *nest, t_lst *lst);
+void		ft_show_set(t_map *nest);
 
 
 #endif

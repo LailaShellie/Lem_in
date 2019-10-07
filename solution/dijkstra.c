@@ -12,87 +12,99 @@
 
 #include "../lem_in.h"
 
-int			find_min(t_map	*map, int cur)
+t_queue		*new_queue(t_map *map, int i)
 {
-	int 	i;
-	int 	ret;
-	t_room	*rooms;
+	t_queue		*new;
 
-	rooms = map->rooms;
-	i = 0;
-	ret = -1;
-	while (i < rooms[cur].num_of_links)
-	{
-		if ((ret == -1 || rooms[ret].weight >= rooms[rooms[cur].links[i]].weight)
-		&& map->pipes[rooms[cur].links[i] + cur * map->num_of_rooms].status == 0)
-			ret = rooms[cur].links[i];
-		++i;
-	}
-	return (ret);
+	if (!(new = (t_queue *)ft_memalloc(sizeof(t_queue))))
+		return (0);
+	new->weight = map->rooms[i].weight;
+	new->i = i;
+	new->next = 0;
+	return (new);
 }
 
-int			find_way(t_map *map)
+int 		get_from_queue(t_map *map)
 {
-	int 	cur;
-	int 	i;
-	t_room	*room;
+	t_queue		*tmp;
+	int 		ret;
 
-	i = -1;
-	room = map->rooms;
-	if ((cur = find_min(map, map->index_end)) < 0)
-		return (0);
-	map->pipes[cur + map->index_end * map->num_of_rooms].status = -1;
-	while (++i < room[cur].num_of_links)
+	if (!map->queue)
+		return (-1);
+	tmp = (map->queue);
+	ret = tmp->i;
+	map->queue = tmp->next;
+	free(tmp);
+	return (ret == map->index_end ? -1 : ret);
+}
+
+int 		put_to_queue(t_map *map, int i)
+{
+	t_queue		*cur;
+	t_queue		*prev;
+	t_queue		*new;
+
+	new = new_queue(map, i);
+	if (!(map->queue))
+		map->queue = new;
+	else
 	{
-		if (room[cur].weight - 1 == room[room[cur].links[i]].weight)
+		cur = map->queue;
+		prev = 0;
+		while (cur)
 		{
-			room[cur].sh = map->step;
-			map->pipes[cur + room[cur].links[i] * map->num_of_rooms].status = -1;
-			cur = room[cur].links[i];
-			i = -1;
+			if (cur->weight > new->weight)
+				break ;
+			prev = cur;
+			cur = cur->next;
+		}
+		if (!prev)
+		{
+			new->next = cur;
+			map->queue = new;
+		}
+		else
+		{
+			prev->next = new;
+			new->next = cur;
 		}
 	}
 	return (1);
 }
 
-int			find_next(t_map *map)
+
+void		show_queue(t_queue *queue)
 {
-	int 	i;
-	t_room	*rooms;
-
-	rooms = map->rooms;
-	i = -1;
-	while (++i < map->num_of_rooms)
+	while (queue)
 	{
-		if (!rooms[i].visited && rooms[i].weight > 0)
-			return (i);
+		printf("%d ", queue->weight);
+		queue = queue->next;
 	}
-	return (-1);
+	printf("\n");
 }
-
 int			dijkstra(t_map *map)
 {
+	int 	cur;
 	int 	i;
-	int 	j;
 	int 	k;
-	t_room	*rooms;
+	t_room	*room;
 
-	rooms = map->rooms;
-	i = map->index_start;
-	rooms[i].weight = 0;
 	k = -1;
+	room = map->rooms;
+	cur = map->index_start;
+	room[cur].weight = 0;
 	while (++k < map->num_of_rooms)
 	{
-		j = -1;
-		while (++j < rooms[i].num_of_links)
+		i = -1;
+		while (++i < room[cur].num_of_links && cur >= 0)
 		{
-			if (rooms[rooms[i].links[j]].weight < 0
-			        || rooms[rooms[i].links[j]].weight > rooms[i].weight + 1)
-				rooms[rooms[i].links[j]].weight = rooms[i].weight + 1;
+			if (room[room[cur].links[i]].weight == -1 || room[cur].weight + 1 < room[room[cur].links[i]].weight)
+			{
+				room[room[cur].links[i]].weight = room[cur].weight + 1;
+				put_to_queue(map, room[cur].links[i]);
+			}
 		}
-		rooms[i].visited = 1;
-		if ((i = find_next(map)) < 0)
-			break ;
+		cur = get_from_queue(map);
 	}
 	return (0);
 }

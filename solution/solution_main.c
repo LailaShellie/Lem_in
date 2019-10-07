@@ -37,6 +37,7 @@ int			find_start_end(t_map *map)
 	rooms = map->rooms;
 	while (++i < map->num_of_rooms)
 	{
+		rooms[i].weight = -1;
 		if (rooms[i].start)
 			map->index_start = i;
 		if (rooms[i].end)
@@ -45,25 +46,43 @@ int			find_start_end(t_map *map)
 	return (1);
 }
 
+int 		show_end_weight(t_map *map)
+{
+	int		i;
+
+	i = -1;
+	printf("End %d\n", map->rooms[map->index_end].weight);
+	while (++i < map->rooms[map->index_end].num_of_links)
+	{
+		printf("%s %d\n", map->rooms[map->rooms[map->index_end].links[i]].name, map->rooms[map->rooms[map->index_end].links[i]].weight);
+	}
+	return (0);
+}
+
 int			solution(t_map *map)
 {
+	int 	ret;
+
 	find_start_end(map);
 	map->step = 1;
 	make_pipes(map);
+//	show_map(map);
 	dijkstra(map);
-	remove_dead_pipes(map);
-	while (find_way(map))
-	{
-		++map->step;
-		find_sets(map);
-	}
-//	show_pipes(map);
-//	ft_show_sets(map);
+//	show_end_weight(map);
+//	show_map(map);
 	if (map->rooms[map->index_end].weight < 0)
 		return (0);
-	if (map->sets)
+//	remove_dead_pipes(map);
+	while ((ret = find_way(map)))
 	{
-		print_solution(choose_set(map->sets), map);
+		find_sets(map);
+		++map->step;
+//		if (ret == 1)
+//			update_dijkstra(map);
 	}
+//	ft_show_sets(map);
+//	show_pipes(map);
+	if (map->sets)
+		print_solution(choose_set(map->sets), map);
 	return (1);
 }
