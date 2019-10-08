@@ -12,6 +12,12 @@
 
 #include "../lem_in.h"
 
+int 		is_blocked(t_map *map, int cur, int next)
+{
+	return (map->pipes[cur + next * map->num_of_rooms].status == -1
+	&& map->pipes[next + cur * map->num_of_rooms].status == -1);
+}
+
 t_queue		*new_queue(t_map *map, int i)
 {
 	t_queue		*new;
@@ -31,11 +37,12 @@ int 		get_from_queue(t_map *map)
 
 	if (!map->queue)
 		return (-1);
-	tmp = (map->queue);
+	tmp = map->queue;
 	ret = tmp->i;
 	map->queue = tmp->next;
 	free(tmp);
 	return (ret == map->index_end ? -1 : ret);
+//	return (ret);
 }
 
 int 		put_to_queue(t_map *map, int i)
@@ -59,29 +66,39 @@ int 		put_to_queue(t_map *map, int i)
 			cur = cur->next;
 		}
 		if (!prev)
-		{
-			new->next = cur;
 			map->queue = new;
-		}
 		else
-		{
 			prev->next = new;
-			new->next = cur;
-		}
+		new->next = cur;
 	}
 	return (1);
 }
 
-
-void		show_queue(t_queue *queue)
+void		clear_graph(t_map *map)
 {
-	while (queue)
+	int 	i;
+	int 	cur;
+	t_room	*room;
+
+	cur = -1;
+	i = -1;
+	room = map->rooms;
+	while (++cur < map->num_of_rooms)
 	{
-		printf("%d ", queue->weight);
-		queue = queue->next;
+		while (++i < room[cur].num_of_links)
+		{
+			if (!is_blocked(map, cur, room[cur].links[i]))
+			{
+				map->pipes[cur + room[cur].links[i] * map->num_of_rooms].status = 0;
+				map->pipes[room[cur].links[i] + cur * map->num_of_rooms].status = 0;
+			}
+			room[cur].sh = 0;
+			room[cur].weight = -1;
+		}
+		i = -1;
 	}
-	printf("\n");
 }
+
 int			dijkstra(t_map *map)
 {
 	int 	cur;
@@ -98,7 +115,9 @@ int			dijkstra(t_map *map)
 		i = -1;
 		while (++i < room[cur].num_of_links && cur >= 0)
 		{
-			if (room[room[cur].links[i]].weight == -1 || room[cur].weight + 1 < room[room[cur].links[i]].weight)
+			if (is_blocked(map, cur, room[cur].links[i]))
+				continue ;
+			if ((room[room[cur].links[i]].weight == -1 || room[cur].weight + 1 < room[room[cur].links[i]].weight))
 			{
 				room[room[cur].links[i]].weight = room[cur].weight + 1;
 				put_to_queue(map, room[cur].links[i]);

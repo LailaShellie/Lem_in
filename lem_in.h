@@ -188,8 +188,9 @@ int			make_pipes(t_map *map);
 int			show_pipes(t_map *map);
 int			remove_dead_pipes(t_map *map);
 int			find_way(t_map *map);
-int 		update_dijkstra(t_map *map);
-int			find_next(t_map *map);
+int			find_overlapping_ways(t_map *map);
+int			find_min_weight(t_map	*map, int cur);
+void		clear_graph(t_map *map);
 
 /*
  * sets.c

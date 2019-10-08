@@ -61,24 +61,33 @@ int 		show_end_weight(t_map *map)
 
 int			solution(t_map *map)
 {
-	int 	ret;
+	int ret;
 
 	find_start_end(map);
 	map->step = 1;
 	make_pipes(map);
-//	show_map(map);
 	dijkstra(map);
 //	show_end_weight(map);
 //	show_map(map);
 	if (map->rooms[map->index_end].weight < 0)
 		return (0);
-//	remove_dead_pipes(map);
-	while ((ret = find_way(map)))
+	while (find_way(map))
 	{
 		find_sets(map);
 		++map->step;
-//		if (ret == 1)
-//			update_dijkstra(map);
+	}
+	clear_graph(map);
+	dijkstra(map);
+	while ((ret = find_overlapping_ways(map)))
+	{
+		if (ret == 1)
+			find_sets(map);
+		++map->step;
+		if (ret < 0)
+		{
+			clear_graph(map);
+			dijkstra(map);
+		}
 	}
 //	ft_show_sets(map);
 //	show_pipes(map);

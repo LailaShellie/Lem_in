@@ -72,27 +72,9 @@ int			remove_dead_pipes(t_map *map)
 int			make_pipes(t_map *map)
 {
 	t_pipe		*pipes;
-	t_room		*rooms;
-	int 		i;
-	int 		j;
 
-	i = -1;
 	if (!(pipes = (t_pipe *)ft_memalloc(sizeof(t_pipe) * map->num_of_rooms * map->num_of_rooms)))
 		return (0);
-	rooms = map->rooms;
-	while (++i < map->num_of_rooms)
-	{
-		j = -1;
-		rooms[i].weight = -1;
-		while (++j < rooms[i].num_of_links)
-		{
-			if (i != j)
-			{
-//				pipes[i + j * map->num_of_rooms].status = 1;
-//				pipes[j + i * map->num_of_rooms].status = 1;
-			}
-		}
-	}
 	map->pipes = pipes;
 	return (1);
 }

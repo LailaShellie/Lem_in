@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_way.c                                         :+:      :+:    :+:   */
+/*   find_overlapping_ways.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lshellie <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/07 17:49:43 by lshellie          #+#    #+#             */
-/*   Updated: 2019/10/07 17:49:44 by lshellie         ###   ########.fr       */
+/*   Created: 2019/10/08 17:01:38 by lshellie          #+#    #+#             */
+/*   Updated: 2019/10/08 17:01:39 by lshellie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../lem_in.h"
 
-int			find_min_weight(t_map	*map, int cur)
+int 		find_max_weight(t_map	*map, int cur)
 {
 	int 	i;
 	int 	ret;
@@ -23,7 +23,7 @@ int			find_min_weight(t_map	*map, int cur)
 	ret = -1;
 	while (i < rooms[cur].num_of_links)
 	{
-		if ((ret == -1 || rooms[ret].weight > rooms[rooms[cur].links[i]].weight) && rooms[rooms[cur].links[i]].weight != -1
+		if ((ret == -1 || rooms[ret].weight < rooms[rooms[cur].links[i]].weight) && rooms[rooms[cur].links[i]].weight != -1
 			&& map->pipes[rooms[cur].links[i] + cur * map->num_of_rooms].status == 0)
 			ret = rooms[cur].links[i];
 		++i;
@@ -31,7 +31,43 @@ int			find_min_weight(t_map	*map, int cur)
 	return (ret);
 }
 
-int			find_way(t_map *map)
+int		break_way(t_map *map, int cur)
+{
+	int 	i;
+	t_room	*room;
+	int 	fl;
+
+	fl = 1;
+	i = -1;
+	room = map->rooms;
+	while (++i < room[cur].num_of_links)
+	{
+		if ((room[cur].sh == room[room[cur].links[i]].sh
+		&& room[cur].weight < room[room[cur].links[i]].weight) || room[cur].links[i] == map->index_end)
+		{
+			if (fl)
+			{
+				map->pipes[cur + room[cur].links[i] * map->num_of_rooms].status = -1;
+				map->pipes[room[cur].links[i] + cur * map->num_of_rooms].status = -1;
+			}
+			else
+			{
+				map->pipes[cur + room[cur].links[i] * map->num_of_rooms].status = 0;
+				map->pipes[room[cur].links[i] + cur * map->num_of_rooms].status = 0;
+			}
+			room[cur].sh = 0;
+			if (room[room[cur].links[i]].num_of_links > 2)
+				fl = 0;
+			cur = room[cur].links[i];
+			i = -1;
+		}
+		if (cur == map->index_end)
+			return (-1);
+	}
+	return (-1);
+}
+
+int 	find_overlapping_ways(t_map *map)
 {
 	int 	cur;
 	int 	i;
@@ -51,6 +87,8 @@ int			find_way(t_map *map)
 		if (room[cur].weight > room[room[cur].links[i]].weight
 			&& map->pipes[cur + room[cur].links[i] * map->num_of_rooms].status == 0)
 		{
+			if (room[room[cur].links[i]].sh && room[room[cur].links[i]].sh != map->step)
+				return (break_way(map, room[cur].links[i]));
 			room[cur].sh = map->step;
 			map->pipes[room[cur].links[i] + cur * map->num_of_rooms].status = -1;
 			cur = room[cur].links[i];
