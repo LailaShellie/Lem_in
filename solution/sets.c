@@ -35,33 +35,6 @@ void		ft_show_set(t_map *nest)
 		printf("------\n");
 }
 
-void		ft_show_sets(t_map *nest)
-{
-	t_lst		*cur_lst;
-	t_ways		*cur_way;
-	t_nodes		*cur_node;
-
-	cur_lst = nest->sets;
-	while (cur_lst)
-	{
-		cur_way = cur_lst->ways;
-		while (cur_way)
-		{
-			cur_node = cur_way->nodes_start;
-			while (cur_node)
-			{
-				printf("%s ", nest->rooms[cur_node->num].name);
-				cur_node = cur_node->next;
-			}
-			printf(" | len - %d ants = %d turns - %d bad  - %d\n", cur_way->len + 1, cur_way->turns ? cur_way->turns - cur_way->len : 0, cur_way->turns, cur_lst->bad);
-			cur_way = cur_way->next;
-		}
-		printf("sum - %d\n", cur_lst->sum);
-		printf("------\n");
-		cur_lst = cur_lst->next;
-	}
-}
-
 int 		set_node(t_ways *new, int cur)
 {
 	t_nodes		*cur_node;
@@ -94,7 +67,7 @@ int			make_set(t_map *nest, t_lst *lst, int cur)
 	i = -1;
 	while (++i < nest->rooms[cur].num_of_links)
 	{
-		if ((nest->rooms[nest->rooms[cur].links[i]].sh == nest->rooms[cur].sh
+		if ((nest->rooms[cur].sh && nest->rooms[nest->rooms[cur].links[i]].sh == nest->rooms[cur].sh
 			 && nest->rooms[nest->rooms[cur].links[i]].weight > nest->rooms[cur].weight) //!!!!! + 1
 			 || nest->rooms[cur].links[i] == nest->index_end)
 		{
@@ -121,17 +94,19 @@ void 		find_sets(t_map *nest)
 	i = -1;
 	while (++i < nest->rooms[cur].num_of_links)
 	{
-		if (nest->rooms[nest->rooms[cur].links[i]].sh != 0)
+		if (nest->rooms[nest->rooms[cur].links[i]].sh != 0)// || nest->rooms[cur].links[i] == nest->index_end)
 		{
 			if (!new)
 			{
 				if (!(new = new_lst()))
 					return ;
-				set_new_set(&nest->sets, new);
 			}
 			make_set(nest, new, nest->rooms[cur].links[i]);
 		}
 	}
 	if (new)
+	{
 		calculate_turns(nest, new);
+		set_new_set(nest, new);
+	}
 }

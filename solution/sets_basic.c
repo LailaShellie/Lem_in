@@ -60,13 +60,22 @@ t_lst		*new_lst(void)
 	return (new);
 }
 
-void		set_new_set(t_lst **lst, t_lst *new)
+void		set_new_set(t_map *map, t_lst *new)
 {
-	if (!*lst)
-		*lst = new;
+	t_lst	*tmp;
+
+
+	if (!map->sets)
+		map->sets = new;
 	else
 	{
-		new->next = *lst;
-		*lst = new;
+		if (map->sets->sum > new->sum)
+		{
+			tmp = map->sets;
+			map->sets = new;
+			free_sets(tmp);
+		}
+		else
+			free_sets(new);
 	}
 }

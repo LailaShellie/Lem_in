@@ -50,11 +50,11 @@ typedef struct		s_lst
 {
 	int 			max_len;
 	int 			sum;
+	int 			ants;
 	int 			all_ants;
 	int 			bad;
 	int 			num_of_sets;
 	t_ways			*ways;
-	struct s_lst	*next;
 }					t_lst;
 
 typedef struct		s_links
@@ -94,7 +94,7 @@ typedef struct		s_map
 	int 			index_start;
 	int				step;
 	t_room			*rooms;
-	t_pipe			*pipes;
+	int				*pipes;
 	t_lst			*sets;
 	t_queue			*queue;
 	char 			*str;
@@ -104,8 +104,7 @@ typedef struct		s_map
  * set_basic.c
  */
 
-void		ft_show_sets(t_map *nest);
-void		set_new_set(t_lst **lst, t_lst *new);
+void		set_new_set(t_map *map, t_lst *new);
 t_lst		*new_lst(void);
 void		free_lst(t_lst *lst);
 t_ways		*new_set(t_map *nest, int cur);
@@ -185,12 +184,11 @@ void		link_rooms(t_map *map, t_links *links);
 int			solution(t_map *map);
 int			dijkstra(t_map *map);
 int			make_pipes(t_map *map);
-int			show_pipes(t_map *map);
-int			remove_dead_pipes(t_map *map);
 int			find_way(t_map *map);
 int			find_overlapping_ways(t_map *map);
 int			find_min_weight(t_map	*map, int cur);
 void		clear_graph(t_map *map);
+int 		is_blocked(t_map *map, int cur, int next);
 
 /*
  * sets.c

@@ -15,29 +15,23 @@
 void		free_sets(t_lst *lst)
 {
 	t_ways		*cur_way;
-	t_lst		*tmp_lst;
 	t_nodes		*tmp_nodes;
 	t_ways		*tmp_set;
 
-	while (lst)
+	cur_way = lst->ways;
+	while (cur_way)
 	{
-		cur_way = lst->ways;
-		while (cur_way)
+		while (cur_way->nodes_start)
 		{
-			while (cur_way->nodes_start)
-			{
-				tmp_nodes = cur_way->nodes_start;
-				cur_way->nodes_start = cur_way->nodes_start->next;
-				free(tmp_nodes);
-			}
-			tmp_set = cur_way;
-			cur_way = cur_way->next;
-			free(tmp_set);
+			tmp_nodes = cur_way->nodes_start;
+			cur_way->nodes_start = cur_way->nodes_start->next;
+			free(tmp_nodes);
 		}
-		tmp_lst = lst;
-		lst = lst->next;
-		free(tmp_lst);
+		tmp_set = cur_way;
+		cur_way = cur_way->next;
+		free(tmp_set);
 	}
+	free(lst);
 }
 
 void		free_split(char **split)

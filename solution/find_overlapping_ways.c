@@ -12,25 +12,6 @@
 
 #include "../lem_in.h"
 
-int 		find_max_weight(t_map	*map, int cur)
-{
-	int 	i;
-	int 	ret;
-	t_room	*rooms;
-
-	rooms = map->rooms;
-	i = 0;
-	ret = -1;
-	while (i < rooms[cur].num_of_links)
-	{
-		if ((ret == -1 || rooms[ret].weight < rooms[rooms[cur].links[i]].weight) && rooms[rooms[cur].links[i]].weight != -1
-			&& map->pipes[rooms[cur].links[i] + cur * map->num_of_rooms].status == 0)
-			ret = rooms[cur].links[i];
-		++i;
-	}
-	return (ret);
-}
-
 int		break_way(t_map *map, int cur)
 {
 	int 	i;
@@ -43,19 +24,19 @@ int		break_way(t_map *map, int cur)
 	while (++i < room[cur].num_of_links)
 	{
 		if ((room[cur].sh == room[room[cur].links[i]].sh
-		&& room[cur].weight < room[room[cur].links[i]].weight) || room[cur].links[i] == map->index_end)
+		&& room[cur].weight < room[room[cur].links[i]].weight)
+		|| room[cur].links[i] == map->index_end)
 		{
 			if (fl)
 			{
-				map->pipes[cur + room[cur].links[i] * map->num_of_rooms].status = -1;
-				map->pipes[room[cur].links[i] + cur * map->num_of_rooms].status = -1;
+				map->pipes[cur + room[cur].links[i] * map->num_of_rooms] = -1;
+				map->pipes[room[cur].links[i] + cur * map->num_of_rooms] = -1;
 			}
 			else
 			{
-				map->pipes[cur + room[cur].links[i] * map->num_of_rooms].status = 0;
-				map->pipes[room[cur].links[i] + cur * map->num_of_rooms].status = 0;
+				map->pipes[cur + room[cur].links[i] * map->num_of_rooms] = 0;
+				map->pipes[room[cur].links[i] + cur * map->num_of_rooms] = 0;
 			}
-			room[cur].sh = 0;
 			if (room[room[cur].links[i]].num_of_links > 2)
 				fl = 0;
 			cur = room[cur].links[i];
@@ -77,7 +58,7 @@ int 	find_overlapping_ways(t_map *map)
 	room = map->rooms;
 	if ((cur = find_min_weight(map, map->index_end)) < 0)
 		return (0);
-	map->pipes[cur + map->index_end * map->num_of_rooms].status = -1;
+	map->pipes[cur + map->index_end * map->num_of_rooms] = -1;
 	while (++i < room[cur].num_of_links)
 	{
 		if (cur == map->index_start)
@@ -85,12 +66,12 @@ int 	find_overlapping_ways(t_map *map)
 		if (room[room[cur].links[i]].weight < 0)
 			continue ;
 		if (room[cur].weight > room[room[cur].links[i]].weight
-			&& map->pipes[cur + room[cur].links[i] * map->num_of_rooms].status == 0)
+			&& map->pipes[cur + room[cur].links[i] * map->num_of_rooms] == 0)
 		{
 			if (room[room[cur].links[i]].sh && room[room[cur].links[i]].sh != map->step)
 				return (break_way(map, room[cur].links[i]));
 			room[cur].sh = map->step;
-			map->pipes[room[cur].links[i] + cur * map->num_of_rooms].status = -1;
+			map->pipes[room[cur].links[i] + cur * map->num_of_rooms] = -1;
 			cur = room[cur].links[i];
 			i = -1;
 		}

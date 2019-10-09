@@ -12,22 +12,6 @@
 
 #include "../lem_in.h"
 
-t_lst	*choose_set(t_lst *lst)
-{
-	t_lst		*cur;
-	t_lst		*tmp;
-
-	tmp = lst;
-	cur = lst;
-	while (cur)
-	{
-		if ((cur->sum < tmp->sum && !cur->bad) || tmp->bad)
-			tmp = cur;
-		cur = cur->next;
-	}
-	return (tmp);
-}
-
 int			find_start_end(t_map *map)
 {
 	t_room		*rooms;
@@ -46,52 +30,53 @@ int			find_start_end(t_map *map)
 	return (1);
 }
 
-int 		show_end_weight(t_map *map)
-{
-	int		i;
-
-	i = -1;
-	printf("End %d\n", map->rooms[map->index_end].weight);
-	while (++i < map->rooms[map->index_end].num_of_links)
-	{
-		printf("%s %d\n", map->rooms[map->rooms[map->index_end].links[i]].name, map->rooms[map->rooms[map->index_end].links[i]].weight);
-	}
-	return (0);
-}
-
 int			solution(t_map *map)
 {
 	int ret;
+	int prev;
+	int fl;
 
+	fl = 0;
+	prev = -1;
 	find_start_end(map);
 	map->step = 1;
 	make_pipes(map);
 	dijkstra(map);
-//	show_end_weight(map);
-//	show_map(map);
 	if (map->rooms[map->index_end].weight < 0)
 		return (0);
 	while (find_way(map))
 	{
 		find_sets(map);
 		++map->step;
+		if (prev < 0 || prev < map->sets->sum)
+			prev = map->sets->sum;
+		else if (prev == map->sets->sum)
+			++fl;
 	}
 	clear_graph(map);
 	dijkstra(map);
-	while ((ret = find_overlapping_ways(map)))
+	while (fl < 50 && (ret = find_overlapping_ways(map)))
 	{
 		if (ret == 1)
+		{
 			find_sets(map);
-		++map->step;
-		if (ret < 0)
+			++map->step;
+			if (prev < 0 || prev > map->sets->sum)
+			{
+				fl = 0;
+				prev = map->sets->sum;
+			}
+			else if (prev == map->sets->sum)
+				++fl;
+		}
+		else
 		{
 			clear_graph(map);
 			dijkstra(map);
+			++map->step;
 		}
 	}
-//	ft_show_sets(map);
-//	show_pipes(map);
 	if (map->sets)
-		print_solution(choose_set(map->sets), map);
+		print_solution(map->sets, map);
 	return (1);
 }
