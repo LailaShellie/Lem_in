@@ -37,5 +37,6 @@ int			main(void)
 	if (!(solution(nest)))
 		return (error(nest));
 	free_map(&nest);
+	free(map);
 	return (0);
 }

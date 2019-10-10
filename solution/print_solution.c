@@ -70,6 +70,7 @@ void	while_node(t_map *nest, t_ways *cur_way, int *fl)
 				write(1, " ", 1);
 			ft_putstr("L");
 			ft_putnbr(cur_node->ant);
+			ft_putstr("-");
 			ft_putstr(nest->rooms[cur_node->num].name);
 			*fl = 1;
 			cur_node->visited = 1;

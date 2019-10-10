@@ -18,6 +18,8 @@ void	free_sets(t_lst *lst)
 	t_nodes		*tmp_nodes;
 	t_ways		*tmp_set;
 
+	if (!lst)
+		return ;
 	cur_way = lst->ways;
 	while (cur_way)
 	{
