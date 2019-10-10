@@ -31,7 +31,7 @@ void		set_dx_dy(t_mlx *mlx, int ant, int room)
 
 void		do_step(t_mlx *mlx)
 {
-	int 	j;
+	int		j;
 
 	j = -1;
 	while (++j < mlx->map->ants)
@@ -44,10 +44,10 @@ void		do_step(t_mlx *mlx)
 void		exec_turn(char *str, t_mlx *mlx)
 {
 	char	**turn;
-	char 	**ant_n_room;
-	int 	i;
-	int 	ant;
-	int 	room;
+	char	**ant_n_room;
+	int		i;
+	int		ant;
+	int		room;
 
 	i = -1;
 	turn = ft_strsplit(str, ' ');
@@ -63,22 +63,10 @@ void		exec_turn(char *str, t_mlx *mlx)
 	ft_free_split(turn, i);
 }
 
-void		set_to_null(t_mlx *mlx)
-{
-	int 	i;
-
-	i = -1;
-	while (++i < mlx->map->ants)
-	{
-		mlx->ants[i].dx = 0;
-		mlx->ants[i].dy = 0;
-	}
-}
-
 void		set_to_start(t_mlx *mlx)
 {
 	int		start;
-	int 	i;
+	int		i;
 	t_pos	pos;
 
 	i = -1;
@@ -93,7 +81,7 @@ void		set_to_start(t_mlx *mlx)
 	}
 }
 
-int		make_step(t_mlx *mlx)
+int			make_step(t_mlx *mlx)
 {
 	int		i;
 

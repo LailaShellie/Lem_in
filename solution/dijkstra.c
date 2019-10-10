@@ -12,12 +12,6 @@
 
 #include "../lem_in.h"
 
-int 		is_blocked(t_map *map, int cur, int next)
-{
-	return (map->pipes[cur + next * map->num_of_rooms] == -1
-	&& map->pipes[next + cur * map->num_of_rooms] == -1);
-}
-
 t_queue		*new_queue(t_map *map, int i)
 {
 	t_queue		*new;
@@ -30,10 +24,10 @@ t_queue		*new_queue(t_map *map, int i)
 	return (new);
 }
 
-int 		get_from_queue(t_map *map)
+int			get_from_queue(t_map *map)
 {
-	t_queue *tmp;
-	int ret;
+	t_queue	*tmp;
+	int		ret;
 
 	if (!map->queue)
 		return (-1);
@@ -44,24 +38,7 @@ int 		get_from_queue(t_map *map)
 	return (ret == map->index_end ? -1 : ret);
 }
 
-//int 		get_from_queue(t_map *map)
-//{
-//	t_queue		*tmp;
-//	int 		ret;
-//
-//	if (!map->queue)
-//		return (-1);
-//	tmp = map->queue;
-//	ret = tmp->i;
-//	if (tmp->next)
-//		map->queue = tmp->next;
-//	else
-//		map->queue = 0;
-//	free(tmp);
-//	return (ret == map->index_end ? -1 : ret);
-//}
-
-int 		put_to_queue(t_map *map, int i)
+int			put_to_queue(t_map *map, int i)
 {
 	t_queue		*cur;
 	t_queue		*prev;
@@ -90,10 +67,38 @@ int 		put_to_queue(t_map *map, int i)
 	return (1);
 }
 
+int			dijkstra(t_map *map, t_room *room)
+{
+	int		cur;
+	int		i;
+	int		k;
+
+	k = -1;
+	cur = map->index_start;
+	room[cur].weight = 0;
+	while (++k < map->num_of_rooms)
+	{
+		i = -1;
+		while (cur >= 0 && ++i < room[cur].num_of_links)
+		{
+			if (is_blocked(map, cur, room[cur].links[i]))
+				continue ;
+			if ((room[room[cur].links[i]].weight == -1
+				|| room[cur].weight + 1 < room[room[cur].links[i]].weight))
+			{
+				room[room[cur].links[i]].weight = room[cur].weight + 1;
+				put_to_queue(map, room[cur].links[i]);
+			}
+		}
+		cur = get_from_queue(map);
+	}
+	return (0);
+}
+
 void		clear_graph(t_map *map)
 {
-	int 	i;
-	int 	cur;
+	int		i;
+	int		cur;
 	t_room	*room;
 
 	cur = -1;
@@ -113,33 +118,5 @@ void		clear_graph(t_map *map)
 		}
 		i = -1;
 	}
-}
-
-int			dijkstra(t_map *map)
-{
-	int 	cur;
-	int 	i;
-	int 	k;
-	t_room	*room;
-
-	k = -1;
-	room = map->rooms;
-	cur = map->index_start;
-	room[cur].weight = 0;
-	while (++k < map->num_of_rooms)
-	{
-		i = -1;
-		while (cur >= 0 && ++i < room[cur].num_of_links)
-		{
-			if (is_blocked(map, cur, room[cur].links[i]))
-				continue ;
-			if ((room[room[cur].links[i]].weight == -1 || room[cur].weight + 1 < room[room[cur].links[i]].weight))
-			{
-				room[room[cur].links[i]].weight = room[cur].weight + 1;
-				put_to_queue(map, room[cur].links[i]);
-			}
-		}
-		cur = get_from_queue(map);
-	}
-	return (0);
+	dijkstra(map, room);
 }

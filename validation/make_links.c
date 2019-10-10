@@ -12,19 +12,21 @@
 
 #include "../lem_in.h"
 
-int 		count_num_of_links(t_map *map, t_links *links)
+int			count_num_of_links(t_map *map, t_links *links)
 {
-	int 	i;
-	int 	n1;
-	int 	n2;
+	int		i;
+	int		n1;
+	int		n2;
 
 	i = -1;
 	while (links->first[++i])
 	{
 		if (links->first[i][0] == '#' || links->second[i][0] == '#')
 			continue ;
-		n1 = find_index_by_name(map->rooms, map->num_of_rooms, links->first[i]);
-		n2 = find_index_by_name(map->rooms, map->num_of_rooms, links->second[i]);
+		n1 = find_index_by_name(map->rooms,
+				map->num_of_rooms, links->first[i]);
+		n2 = find_index_by_name(map->rooms,
+				map->num_of_rooms, links->second[i]);
 		if (n1 < 0 || n2 < 0)
 			return (0);
 		map->rooms[n1].num_of_links += 1;
@@ -33,10 +35,10 @@ int 		count_num_of_links(t_map *map, t_links *links)
 	return (1);
 }
 
-int 		count_links(char **split)
+int			count_links(char **split)
 {
 	int		i;
-	int 	num;
+	int		num;
 
 	i = -1;
 	num = 0;
@@ -49,9 +51,9 @@ int 		count_links(char **split)
 void		set_links(t_links *links, char **split)
 {
 	int		i;
-	int 	j;
-	int 	num;
-	char 	*minus;
+	int		j;
+	int		num;
+	char	*minus;
 
 	j = 0;
 	i = -1;
@@ -70,14 +72,13 @@ void		set_links(t_links *links, char **split)
 			links->second[j] = ft_strdup(minus + 1);
 			++j;
 		}
-
 	}
 }
 
 int			check_links_duplicates(t_links *links)
 {
-	int 	i;
-	int 	j;
+	int		i;
+	int		j;
 
 	i = -1;
 	while (links->first[++i])
@@ -87,8 +88,10 @@ int			check_links_duplicates(t_links *links)
 		j = i;
 		while (links->first[++j])
 		{
-			if ((!ft_strcmp(links->first[i], links->first[j]) && !ft_strcmp(links->second[i], links->second[j])) ||
-			(!ft_strcmp(links->second[i], links->first[j]) && !ft_strcmp(links->first[i], links->second[j])))
+			if ((!ft_strcmp(links->first[i], links->first[j])
+			&& !ft_strcmp(links->second[i], links->second[j])) ||
+			(!ft_strcmp(links->second[i], links->first[j])
+			&& !ft_strcmp(links->first[i], links->second[j])))
 			{
 				links->first[i][0] = '#';
 				links->second[i][0] = '#';
@@ -98,7 +101,7 @@ int			check_links_duplicates(t_links *links)
 	return (1);
 }
 
-int 		make_links(t_map *map, char **split)
+int			make_links(t_map *map, char **split)
 {
 	t_links	links;
 

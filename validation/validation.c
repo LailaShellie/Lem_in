@@ -12,23 +12,24 @@
 
 #include "../lem_in.h"
 
-int     check_start_end(t_map *nest)
+int		check_start_end(t_map *nest)
 {
-	int     i;
+	int		i;
 
 	i = -1;
 	while (++i < nest->num_of_rooms)
 	{
-		if ((nest->rooms[i].end || nest->rooms[i].start) && !nest->rooms[i].num_of_links)
+		if ((nest->rooms[i].end
+		|| nest->rooms[i].start) && !nest->rooms[i].num_of_links)
 			return (0);
 	}
 	return (1);
 }
 
-int 	check_duplicates(t_room *rooms, int num)
+int		check_duplicates(t_room *rooms, int num)
 {
-	int 	i;
-	int 	j;
+	int		i;
+	int		j;
 
 	i = -1;
 	while (++i < num - 1)
@@ -47,7 +48,7 @@ int 	check_duplicates(t_room *rooms, int num)
 
 int		check_order(char **split, int *mas)
 {
-	int 	i;
+	int		i;
 
 	i = -1;
 	while (++i < 3)
@@ -64,8 +65,8 @@ int		check_order(char **split, int *mas)
 
 int		validation(char *map)
 {
-	char 	**split;
-	int 	mas[3];
+	char	**split;
+	int		mas[3];
 
 	if (!map)
 		return (0);

@@ -17,7 +17,6 @@
 # include <math.h>
 # define WIDTH 1000
 # define HEIGHT 1000
-# define ANT "00100000100001000001000001000100000001110000100011100010100111001000100100100000101010001111010111100010101000001001001000100111001010001010001000010100000000101000000001110000";
 
 typedef struct		s_ant
 {
@@ -30,15 +29,15 @@ typedef struct		s_ant
 typedef struct		s_img
 {
 	void			*img;
-	int 			bpp;
-	int 			size_line;
-	int 			endian;
-	int 			*data;
-	int 			dx;
-	int 			dy;
-	int 			zoom;
+	int				bpp;
+	int				size_line;
+	int				endian;
+	int				*data;
+	int				dx;
+	int				dy;
+	int				zoom;
 	int				width;
-	int 			height;
+	int				height;
 }					t_img;
 
 typedef struct		s_mlx
@@ -49,7 +48,7 @@ typedef struct		s_mlx
 	t_map			*map;
 	t_ant			*ants;
 	void			*ant_img;
-	char 			**turns;
+	char			**turns;
 	int				turn;
 	int				num_of_turns;
 	int				step;
@@ -79,6 +78,7 @@ typedef struct		s_pos
 	int				err;
 }					t_pos;
 
+void				set_to_null(t_mlx *mlx);
 void				init(t_mlx *mlx);
 void				draw(t_mlx *mlx);
 void				calculate_positions(t_mlx *mlx);

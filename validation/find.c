@@ -12,7 +12,7 @@
 
 #include "../lem_in.h"
 
-int		find_start(t_map *nest)
+int	find_start(t_map *nest)
 {
 	int i;
 
@@ -23,9 +23,9 @@ int		find_start(t_map *nest)
 	return (-1);
 }
 
-int 	find_index_by_name(t_room *rooms, int num, char *name)
+int	find_index_by_name(t_room *rooms, int num, char *name)
 {
-	int 	i;
+	int	i;
 
 	i = -1;
 	while (++i < num)
@@ -36,9 +36,9 @@ int 	find_index_by_name(t_room *rooms, int num, char *name)
 	return (-1);
 }
 
-int		find_links(char **split)
+int	find_links(char **split)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (split[i])
@@ -50,9 +50,9 @@ int		find_links(char **split)
 	return (-1);
 }
 
-int		find_rooms(char **split)
+int	find_rooms(char **split)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (split[i])
@@ -64,9 +64,9 @@ int		find_rooms(char **split)
 	return (-1);
 }
 
-int		find_ants(char **split)
+int	find_ants(char **split)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (split[i])

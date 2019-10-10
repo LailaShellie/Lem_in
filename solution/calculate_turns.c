@@ -12,7 +12,7 @@
 
 #include "../lem_in.h"
 
-void 	find_max(t_lst *lst)
+void		find_max(t_lst *lst)
 {
 	t_ways		*cur_way;
 
@@ -20,31 +20,31 @@ void 	find_max(t_lst *lst)
 	cur_way = lst->ways;
 	while (cur_way)
 	{
-		if (cur_way->turns < cur_way->len)
-			lst->bad = 1;
 		if (cur_way->turns > lst->sum)
 			lst->sum = cur_way->turns;
 		cur_way = cur_way->next;
 	}
 }
 
-int		is_sorted(t_ways *ways)
+int			is_sorted(t_ways *ways)
 {
 	t_ways		*cur_way;
 
 	cur_way = ways;
 	while (cur_way && cur_way->next)
 	{
-		if (cur_way->next->turns && cur_way->turns > cur_way->next->turns)
+		if (cur_way->next->turns
+		&& cur_way->turns > cur_way->next->turns)
 			return (0);
-		if (!cur_way->next->turns && cur_way->turns > cur_way->next->len)
+		if (!cur_way->next->turns
+		&& cur_way->turns > cur_way->next->len)
 			return (0);
 		cur_way = cur_way->next;
 	}
 	return (1);
 }
 
-int 	calculate_turns(t_map *nest, t_lst *lst)
+int			calculate_turns(t_map *nest, t_lst *lst)
 {
 	t_ways		*cur_way;
 
@@ -60,7 +60,8 @@ int 	calculate_turns(t_map *nest, t_lst *lst)
 				--cur_way->turns;
 				cur_way->next->turns = cur_way->next->len + 1;
 			}
-			while (cur_way->next->turns && cur_way->turns > cur_way->next->turns)
+			while (cur_way->next->turns
+			&& cur_way->turns > cur_way->next->turns)
 			{
 				--cur_way->turns;
 				++cur_way->next->turns;

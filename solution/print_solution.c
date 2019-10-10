@@ -12,37 +12,6 @@
 
 #include "../lem_in.h"
 
-//void	make_step(t_lst *lst)
-//{
-//	t_nodes		*cur_node;
-//	t_ways		*cur_way;
-//	int 		order;
-//
-//	order = 1;
-//	cur_way = lst->ways;
-//	while (cur_way)
-//	{
-//		cur_node = cur_way->nodes_end;
-//		while (cur_node)
-//		{
-//			if (cur_node->next)
-//				cur_node->next->ant = cur_node->ant;
-//			if (!cur_node->prev && cur_way->num_of_ants > 0)
-//			{
-//				--cur_way->num_of_ants;
-//				cur_node->ant += !cur_node->ant ? order : lst->num_of_sets;
-//				if (cur_node->ant > lst->all_ants)
-//					--cur_node->ant;
-//			}
-//			else if (!cur_node->prev && cur_way->num_of_ants <= 0)
-//				cur_node->ant = 0;
-//			cur_node->visited = 0;
-//			cur_node = cur_node->prev;
-//		}
-//		++order;
-//		cur_way = cur_way->next;
-//	}
-//}
 void	make_step(t_lst *lst)
 {
 	t_nodes		*cur_node;
@@ -77,7 +46,8 @@ void	find_ends(t_lst *lst)
 	{
 		if (cur_way->len > lst->max_len)
 			lst->max_len = cur_way->len;
-		cur_way->num_of_ants = cur_way->turns ? cur_way->turns - cur_way->len : 0;
+		cur_way->num_of_ants = cur_way->turns
+				? cur_way->turns - cur_way->len : 0;
 		cur_node = cur_way->nodes_start;
 		while (cur_node->next)
 			cur_node = cur_node->next;
@@ -87,19 +57,39 @@ void	find_ends(t_lst *lst)
 	}
 }
 
-int 	print_solution(t_lst *lst, t_map *nest)
+void	while_node(t_map *nest, t_ways *cur_way, int *fl)
 {
 	t_nodes		*cur_node;
+
+	cur_node = cur_way->nodes_end;
+	while (cur_node)
+	{
+		if (!cur_node->visited && cur_node->ant)
+		{
+			if (*fl == 1)
+				write(1, " ", 1);
+			ft_putstr("L");
+			ft_putnbr(cur_node->ant);
+			ft_putstr(nest->rooms[cur_node->num].name);
+			*fl = 1;
+			cur_node->visited = 1;
+			cur_node = cur_way->nodes_start;
+		}
+		cur_node = cur_node->prev;
+	}
+}
+
+int		print_solution(t_lst *lst, t_map *nest)
+{
 	t_ways		*cur_way;
-	int 		i;
-	int         fl;
+	int			i;
+	int			fl;
 
 	find_ends(lst);
 	lst->all_ants = nest->ants;
-	printf("%s\n", nest->str);
 	while (lst->sum--)
 	{
-        fl = 0;
+		fl = 0;
 		make_step(lst);
 		i = -1;
 		while (++i <= lst->max_len)
@@ -107,25 +97,11 @@ int 	print_solution(t_lst *lst, t_map *nest)
 			cur_way = lst->ways;
 			while (cur_way)
 			{
-				cur_node = cur_way->nodes_end;
-				while (cur_node)
-				{
-					if (!cur_node->visited && cur_node->ant)
-					{
-
-						if (fl == 1)
-							printf(" ");
-						printf("L%d-%s", cur_node->ant, nest->rooms[cur_node->num].name);
-						fl = 1;
-						cur_node->visited = 1;
-						cur_node = cur_way->nodes_start;
-					}
-					cur_node = cur_node->prev;
-				}
+				while_node(nest, cur_way, &fl);
 				cur_way = cur_way->next;
 			}
 		}
-		printf("\n");
+		write(1, "\n", 1);
 	}
 	return (0);
 }

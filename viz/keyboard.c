@@ -12,11 +12,23 @@
 
 #include "vizualizer.h"
 
+void			set_to_null(t_mlx *mlx)
+{
+	int		i;
+
+	i = -1;
+	while (++i < mlx->map->ants)
+	{
+		mlx->ants[i].dx = 0;
+		mlx->ants[i].dy = 0;
+	}
+}
+
 int				key_event(int key_code, t_mlx *win)
 {
 	if (key_code == 53)
 		exit(0);
-    else if (key_code == 49)
+	else if (key_code == 49)
 		sleep(1);
 	return (0);
 }

@@ -18,14 +18,16 @@ void		put_ant(t_mlx *mlx)
 	int		i;
 	t_room	*cur;
 	t_pos	pos;
-	void	*ant = make_ant(mlx);
+	void	*ant;
 
+	ant = make_ant(mlx);
 	cur = mlx->map->rooms;
 	i = -1;
 	while (++i < mlx->map->num_of_rooms)
 	{
 		set_pos(&pos, mlx, &cur[i]);
-		mlx_put_image_to_window(mlx->mlx, mlx->win, ant, pos.x0 - 5, pos.y0 - 7);
+		mlx_put_image_to_window(mlx->mlx,
+				mlx->win, ant, pos.x0 - 5, pos.y0 - 7);
 	}
 }
 
@@ -44,16 +46,22 @@ void		put_ants(t_mlx *mlx)
 void		*make_ant(t_mlx *mlx)
 {
 	t_img		img;
-	char 		*str;
-	int 		color;
-	int 		i;
+	char		*str;
+	int			color;
+	int			i;
 
 	i = -1;
-	str = ANT;
+	str = "0010000010000100000100000100010000"
+	"000111000010001110001010011100100010010010"
+	"00001010100011110101111000101010000010"
+	"0100100010011100101000101000100001010"
+	"0000000101000000001110000";
 	color = set_colors(0, 255, 0, 0);
 	if (!(img.img = mlx_new_image(mlx->mlx, 11, 16)))
 		return (0);
-	if (!(img.data = (int *)mlx_get_data_addr(img.img, &img.bpp, &img.size_line, &img.endian)))
+	if (!(img.data =
+			(int *)mlx_get_data_addr(img.img,
+					&img.bpp, &img.size_line, &img.endian)))
 		return (0);
 	while (++i < 176)
 	{

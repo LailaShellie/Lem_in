@@ -47,8 +47,7 @@ void		put_set(t_lst *lst, t_ways *new)
 		prev = cur;
 		cur = cur->next;
 	}
-	if (prev)
-	    prev->next = new;
+	prev ? prev->next = new : 0;
 }
 
 t_lst		*new_lst(void)
@@ -63,7 +62,6 @@ t_lst		*new_lst(void)
 void		set_new_set(t_map *map, t_lst *new)
 {
 	t_lst	*tmp;
-
 
 	if (!map->sets)
 		map->sets = new;

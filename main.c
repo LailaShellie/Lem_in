@@ -12,7 +12,7 @@
 
 #include "lem_in.h"
 
-int     error(t_map *nest, int fl)
+int			error(t_map *nest)
 {
 	if (nest)
 		free_map(&nest);
@@ -20,7 +20,7 @@ int     error(t_map *nest, int fl)
 	return (0);
 }
 
-int		main()
+int			main(void)
 {
 	char	*map;
 	t_map	*nest;
@@ -28,15 +28,14 @@ int		main()
 	nest = 0;
 	map = read_and_save();
 	if (!(validation(map)))
-		return (error(nest, 0));
+		return (error(nest));
 	if (!(nest = make_map(map)))
-		return (error(nest, 0));
+		return (error(nest));
 	if (!check_start_end(nest))
-		return (error(nest, 0));
-	nest->str = map;
+		return (error(nest));
+	ft_putendl(map);
 	if (!(solution(nest)))
-		return (error(nest, 0));
-//	show_map(nest);
+		return (error(nest));
 	free_map(&nest);
 	return (0);
 }

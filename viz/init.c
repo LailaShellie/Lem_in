@@ -26,7 +26,7 @@ void			hooks(t_mlx *mlx)
 	mlx_loop(mlx->mlx);
 }
 
-void		init(t_mlx *mlx)
+void			init(t_mlx *mlx)
 {
 	if (!(mlx->mlx = mlx_init()))
 		return ;
@@ -41,7 +41,7 @@ void		init(t_mlx *mlx)
 		return ;
 	calculate_positions(mlx);
 	mlx->ant_img = make_ant(mlx);
-	if (!(mlx->ants = (t_ant *) ft_memalloc(sizeof(t_ant) * mlx->map->ants)))
+	if (!(mlx->ants = (t_ant *)ft_memalloc(sizeof(t_ant) * mlx->map->ants)))
 		return ;
 	set_to_start(mlx);
 	put_ants(mlx);

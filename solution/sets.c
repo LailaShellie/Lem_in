@@ -12,30 +12,7 @@
 
 #include "../lem_in.h"
 
-void		ft_show_set(t_map *nest)
-{
-	t_lst		*cur_lst;
-	t_ways		*cur_way;
-	t_nodes		*cur_node;
-
-	cur_lst = nest->sets;
-		cur_way = cur_lst->ways;
-		while (cur_way)
-		{
-			cur_node = cur_way->nodes_start;
-			while (cur_node)
-			{
-				printf("%s ", nest->rooms[cur_node->num].name);
-				cur_node = cur_node->next;
-			}
-			printf(" | len - %d ants = %d turns - %d bad  - %d\n", cur_way->len + 1, cur_way->turns ? cur_way->turns - cur_way->len : 0, cur_way->turns, cur_lst->bad);
-			cur_way = cur_way->next;
-		}
-		printf("sum - %d\n", cur_lst->sum);
-		printf("------\n");
-}
-
-int 		set_node(t_ways *new, int cur)
+int			set_node(t_ways *new, int cur)
 {
 	t_nodes		*cur_node;
 
@@ -58,7 +35,7 @@ int 		set_node(t_ways *new, int cur)
 
 int			make_set(t_map *nest, t_lst *lst, int cur)
 {
-	int 	i;
+	int		i;
 	t_ways	*new;
 
 	if (!(new = new_set(nest, cur)))
@@ -67,9 +44,11 @@ int			make_set(t_map *nest, t_lst *lst, int cur)
 	i = -1;
 	while (++i < nest->rooms[cur].num_of_links)
 	{
-		if ((nest->rooms[cur].sh && nest->rooms[nest->rooms[cur].links[i]].sh == nest->rooms[cur].sh
-			 && nest->rooms[nest->rooms[cur].links[i]].weight > nest->rooms[cur].weight) //!!!!! + 1
-			 || nest->rooms[cur].links[i] == nest->index_end)
+		if ((nest->rooms[cur].sh &&
+		nest->rooms[nest->rooms[cur].links[i]].sh == nest->rooms[cur].sh
+			&& nest->rooms[nest->rooms[cur].links[i]].weight
+			> nest->rooms[cur].weight)
+			|| nest->rooms[cur].links[i] == nest->index_end)
 		{
 			set_node(new, nest->rooms[cur].links[i]);
 			cur = nest->rooms[cur].links[i];
@@ -83,10 +62,10 @@ int			make_set(t_map *nest, t_lst *lst, int cur)
 	return (1);
 }
 
-void 		find_sets(t_map *nest)
+void		find_sets(t_map *nest)
 {
-	int 	cur;
-	int 	i;
+	int		cur;
+	int		i;
 	t_lst	*new;
 
 	new = 0;
@@ -94,7 +73,7 @@ void 		find_sets(t_map *nest)
 	i = -1;
 	while (++i < nest->rooms[cur].num_of_links)
 	{
-		if (nest->rooms[nest->rooms[cur].links[i]].sh != 0)// || nest->rooms[cur].links[i] == nest->index_end)
+		if (nest->rooms[nest->rooms[cur].links[i]].sh != 0)
 		{
 			if (!new)
 			{

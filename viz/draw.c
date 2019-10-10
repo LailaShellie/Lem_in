@@ -12,13 +12,13 @@
 
 #include "vizualizer.h"
 
-int		set_colors(unsigned char o, unsigned char r, \
+int				set_colors(unsigned char o, unsigned char r, \
 			unsigned char g, unsigned char b)
 {
-	int i;
-	int tmp;
-	int res;
-	int j;
+	int	i;
+	int	tmp;
+	int	res;
+	int	j;
 
 	i = 0;
 	res = 0;
@@ -52,10 +52,10 @@ static void		plot(int x, int y, t_img *win, int color)
 	mas[x + y * win->size_line / 4] = color;
 }
 
-void		draw_room(t_room *room, t_mlx *mlx)
+void			draw_room(t_room *room, t_mlx *mlx)
 {
 	t_pos	pos;
-	int 	j;
+	int		j;
 
 	set_pos(&pos, mlx, room);
 	while (pos.x >= pos.y)
@@ -78,25 +78,27 @@ void		draw_room(t_room *room, t_mlx *mlx)
 		draw_line(mlx, room, &mlx->map->rooms[room->links[j]]);
 }
 
-void		put_names(t_mlx *mlx)
+void			put_names(t_mlx *mlx)
 {
 	t_pos	pos;
-	int 	i;
+	int		i;
 
 	i = -1;
 	while (++i < mlx->map->num_of_rooms)
 	{
 		set_pos(&pos, mlx, &mlx->map->rooms[i]);
-		mlx_string_put(mlx->mlx, mlx->win, pos.x0 + pos.x, pos.y0 + pos.y, set_colors(0, 255, 255, 255), mlx->map->rooms[i].name);
+		mlx_string_put(mlx->mlx, mlx->win, pos.x0 + pos.x,
+				pos.y0 + pos.y, set_colors(0, 255, 255, 255),
+				mlx->map->rooms[i].name);
 	}
 }
 
-void		draw(t_mlx *mlx)
+void			draw(t_mlx *mlx)
 {
 	t_room	*cur;
-	int 	num;
+	int		num;
 	int		i;
-	int 	j;
+	int		j;
 
 	i = -1;
 	bzero(mlx->img->data, WIDTH * HEIGHT * 4);

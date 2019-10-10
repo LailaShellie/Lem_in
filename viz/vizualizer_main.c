@@ -12,7 +12,7 @@
 
 #include "vizualizer.h"
 
-static char	*ft_strjoin_n(char *s1, char *s2)
+static char		*ft_strjoin_n(char *s1, char *s2)
 {
 	unsigned int	len1;
 	unsigned int	len2;
@@ -42,7 +42,7 @@ static char		*read_input(void)
 {
 	char	*map;
 	char	*buf;
-	int 	ret;
+	int		ret;
 
 	map = 0;
 	buf = 0;
@@ -58,10 +58,10 @@ static char		*read_input(void)
 	return (map);
 }
 
-static char 	*get_turns(char *input)
+static char		*get_turns(char *input)
 {
-	char 	*turns;
-	int 	i;
+	char	*turns;
+	int		i;
 
 	i = -1;
 	while (input[++i])
@@ -74,11 +74,11 @@ static char 	*get_turns(char *input)
 	return (turns);
 }
 
-int 			main()
+int				main(void)
 {
 	char	*input;
-	char 	*turns;
-	char 	*map;
+	char	*turns;
+	char	*map;
 	t_map	*nest;
 	t_mlx	mlx;
 

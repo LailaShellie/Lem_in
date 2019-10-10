@@ -12,10 +12,10 @@
 
 #include "../lem_in.h"
 
-int			find_min_weight(t_map	*map, int cur)
+int			find_min_weight(t_map *map, int cur)
 {
-	int 	i;
-	int 	ret;
+	int		i;
+	int		ret;
 	t_room	*rooms;
 
 	rooms = map->rooms;
@@ -23,8 +23,9 @@ int			find_min_weight(t_map	*map, int cur)
 	ret = -1;
 	while (i < rooms[cur].num_of_links)
 	{
-		if ((ret == -1 || rooms[ret].weight > rooms[rooms[cur].links[i]].weight) && rooms[rooms[cur].links[i]].weight != -1
-			&& map->pipes[rooms[cur].links[i] + cur * map->num_of_rooms] == 0)
+		if ((ret == -1 || rooms[ret].weight > rooms[rooms[cur].links[i]].weight)
+		&& rooms[rooms[cur].links[i]].weight != -1
+		&& map->pipes[rooms[cur].links[i] + cur * map->num_of_rooms] == 0)
 			ret = rooms[cur].links[i];
 		++i;
 	}
@@ -33,8 +34,8 @@ int			find_min_weight(t_map	*map, int cur)
 
 int			find_way(t_map *map)
 {
-	int 	cur;
-	int 	i;
+	int		cur;
+	int		i;
 	t_room	*room;
 
 	i = -1;

@@ -12,6 +12,45 @@
 
 #include "../lem_in.h"
 
+int			count_rooms(char **split)
+{
+	int		i;
+	int		num;
+
+	i = -1;
+	num = 0;
+	while (split[++i])
+	{
+		if (is_room(split[i]))
+			++num;
+	}
+	return (num);
+}
+
+t_map		*make_map(char *map)
+{
+	t_map		*new_map;
+	char		**split;
+
+	if (!(new_map = (t_map *)ft_memalloc(sizeof(t_map))) \
+	|| !(split = ft_strsplit(map, '\n')))
+		return (0);
+	new_map->ants = ft_atoi(split[find_ants(split)]);
+	new_map->num_of_rooms = count_rooms(split);
+	if (!(new_map->rooms = make_rooms(split, new_map->num_of_rooms)))
+	{
+		free_map(&new_map);
+		return (0);
+	}
+	if (!make_links(new_map, split))
+	{
+		free_map(&new_map);
+		return (0);
+	}
+	free_split(split);
+	return (new_map);
+}
+
 char		*ft_free_split(char **split, int num)
 {
 	int		i;
@@ -56,7 +95,7 @@ char		*read_and_save(void)
 {
 	char	*map;
 	char	*buf;
-	int 	ret;
+	int		ret;
 
 	map = 0;
 	buf = 0;

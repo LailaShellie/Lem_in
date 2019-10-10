@@ -12,11 +12,11 @@
 
 #include "../lem_in.h"
 
-int 	check_part4(char **split)
+int		check_part4(char **split)
 {
-	int 	i;
-	int 	start;
-	int 	end;
+	int		i;
+	int		start;
+	int		end;
 
 	end = 0;
 	start = 0;
@@ -39,9 +39,9 @@ int 	check_part4(char **split)
 	return (start + end == 2 ? 1 : 0);
 }
 
-int 	check_part3(char **split, int *mas)
+int		check_part3(char **split, int *mas)
 {
-	int 	i;
+	int		i;
 
 	i = mas[2];
 	while (split[++i])
@@ -54,10 +54,10 @@ int 	check_part3(char **split, int *mas)
 	return (1);
 }
 
-int 	check_part2(char **split, int *mas)
+int		check_part2(char **split, int *mas)
 {
 	int		i;
-	int 	end;
+	int		end;
 
 	i = mas[1];
 	end = mas[2];
@@ -71,10 +71,10 @@ int 	check_part2(char **split, int *mas)
 	return (1);
 }
 
-int 	check_part1(char **split, int *mas)
+int		check_part1(char **split, int *mas)
 {
-	int 	i;
-	int 	end;
+	int		i;
+	int		end;
 
 	end = mas[1];
 	i = -1;

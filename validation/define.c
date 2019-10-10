@@ -33,7 +33,7 @@ int		is_number(char *line)
 int		is_link(char *line)
 {
 	char	**split;
-	int 	i;
+	int		i;
 
 	i = 0;
 	if (!line)
@@ -53,7 +53,7 @@ int		is_link(char *line)
 int		is_room(char *line)
 {
 	char	**split;
-	int 	i;
+	int		i;
 
 	i = 0;
 	if (!line)
