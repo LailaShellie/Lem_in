@@ -34,9 +34,9 @@ int			main(void)
 	if (!check_start_end(nest))
 		return (error(nest));
 	ft_putendl(map);
+	free(map);
 	if (!(solution(nest)))
 		return (error(nest));
 	free_map(&nest);
-	free(map);
 	return (0);
 }
