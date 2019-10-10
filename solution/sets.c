@@ -73,7 +73,8 @@ void		find_sets(t_map *nest)
 	i = -1;
 	while (++i < nest->rooms[cur].num_of_links)
 	{
-		if (nest->rooms[nest->rooms[cur].links[i]].sh != 0)
+		if (nest->rooms[cur].links[i] == nest->index_end ||
+		nest->rooms[nest->rooms[cur].links[i]].sh != 0)
 		{
 			if (!new)
 			{

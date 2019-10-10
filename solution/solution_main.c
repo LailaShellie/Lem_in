@@ -61,12 +61,12 @@ void		solution2(t_map *map)
 		{
 			find_sets(map);
 			++map->step;
-			if (prev < 0 || prev > map->sets->sum)
+			if (map->sets && (prev < 0 || prev < map->sets->sum))
 			{
 				fl = 0;
 				prev = map->sets->sum;
 			}
-			else if (prev == map->sets->sum)
+			else if (map->sets && prev == map->sets->sum)
 				++fl;
 		}
 		else
@@ -91,9 +91,9 @@ int			solution(t_map *map)
 	{
 		find_sets(map);
 		++map->step;
-		if (prev < 0 || prev < map->sets->sum)
+		if (map->sets && (prev < 0 || prev < map->sets->sum))
 			prev = map->sets->sum;
-		else if (prev == map->sets->sum)
+		else if (map->sets && prev == map->sets->sum)
 			++fl;
 	}
 	clear_graph(map);
