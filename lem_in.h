@@ -82,6 +82,7 @@ typedef struct		s_map
 	int				index_end;
 	int				index_start;
 	int				step;
+	char 			*output;
 	t_room			*rooms;
 	int				*pipes;
 	t_lst			*sets;

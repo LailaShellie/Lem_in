@@ -31,10 +31,9 @@ int			main(void)
 		return (error(nest));
 	if (!(nest = make_map(map)))
 		return (error(nest));
+	nest->output = map;
 	if (!check_start_end(nest))
 		return (error(nest));
-	ft_putendl(map);
-	free(map);
 	if (!(solution(nest)))
 		return (error(nest));
 	free_map(&nest);

@@ -87,6 +87,7 @@ int		print_solution(t_lst *lst, t_map *nest)
 	int			fl;
 
 	find_ends(lst);
+	ft_putendl(nest->output);
 	lst->all_ants = nest->ants;
 	while (lst->sum--)
 	{

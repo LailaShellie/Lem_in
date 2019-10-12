@@ -74,6 +74,7 @@ void	free_map(t_map **map)
 	free_rooms(&(*map)->rooms, (*map)->num_of_rooms);
 	free_sets((*map)->sets);
 	free((*map)->pipes);
+	free((*map)->output);
 	free(*map);
 	*map = 0;
 }
